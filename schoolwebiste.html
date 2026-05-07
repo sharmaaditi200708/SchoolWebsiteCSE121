@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eminence Global School</title>
+
+  <!-- =============================================
+       INTERNAL CSS — All styles live here
+       ============================================= -->
+  <style>
+    /* --- Reset & Base --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1a1a2e;
+      background: #faf5ff;
+    }
+
+    /* --- Navigation Bar --- */
+    nav {
+      background: #6b21a8;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      height: 56px;
+    }
+
+    /* School logo/name in the nav */
+    .nav-logo {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Container for navigation links */
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* Individual nav links */
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    /* Hover and active state for nav links */
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    /* Hamburger button — hidden on desktop, shown on mobile */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    /* --- Section Visibility ---
+       Only the section with class "active" is shown */
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    /* --- Hero / Home Section --- */
+    .hero {
+      background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%);
+      color: #fff;
+      padding: 5rem 1.25rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 17px;
+      opacity: 0.9;
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Button row in the hero */
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Primary white button */
+    .btn-primary {
+      background: #fff;
+      color: #6b21a8;
+      border: none;
+      padding: 10px 26px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Outline button (ghost style) */
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      padding: 10px 26px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Stats banner inside the hero */
+    .hero-banner {
+      max-width: 960px;
+      margin: 3rem auto 0;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-stat .num {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .hero-stat .lbl {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    /* Welcome message that appears when the button is clicked */
+    #welcome-msg {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin: 1.5rem auto 0;
+      max-width: 480px;
+      font-size: 15px;
+      display: none; /* hidden by default, shown by JS */
+    }
+
+    /* --- Shared Content Wrapper --- */
+    .content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.25rem;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1a1a2e;
+    }
+
+    .section-sub {
+      color: #5a6a7a;
+      font-size: 15px;
+      margin-bottom: 0.5rem;
+    }
+
+    /* --- About Section Cards --- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 2rem;
+    }
+
+    .about-card {
+      background: #fff;
+      border: 1px solid #e0e8f0;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .about-card .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .about-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .about-card p {
+      font-size: 13px;
+      color: #5a6a7a;
+    }
+
+    /* --- Courses Section --- */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 2rem;
+    }
+
+    .course-card {
+      background: #fff;
+      border: 1px solid #e0e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .course-top {
+      padding: 1.25rem 1.25rem 1rem;
+      border-bottom: 1px solid #e0e8f0;
+    }
+
+    /* Coloured badge/pill for each course category */
+    .course-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .badge-blue   { background: #f3e8ff; color: #6b21a8; }
+    .badge-green  { background: #dcfce7; color: #166534; }
+    .badge-amber  { background: #fef3c7; color: #92400e; }
+    .badge-purple { background: #ede9fe; color: #4c1d95; }
+    .badge-coral  { background: #fee2e2; color: #991b1b; }
+
+    .course-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .course-card p {
+      font-size: 13px;
+      color: #5a6a7a;
+    }
+
+    .course-bottom {
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #5a6a7a;
+    }
+
+    /* "Enroll" button on course cards */
+    .enroll-btn {
+      background: #6b21a8;
+      color: #fff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .enroll-btn:hover {
+      background: #581c87;
+    }
+
+    /* --- Contact Section --- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    /* Blue icon box for contact details */
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: #f3e8ff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .info-row h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .info-row p {
+      font-size: 13px;
+      color: #5a6a7a;
+    }
+
+    /* White card wrapping the contact form */
+    .contact-form {
+      background: #fff;
+      border: 1px solid #e0e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* Text inputs and textarea */
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #6b21a8;
+      box-shadow: 0 0 0 3px rgba(107, 33, 168, 0.12);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Inline error messages — hidden by default, shown by JS */
+    .err {
+      color: #b91c1c;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* Form submit button */
+    .submit-btn {
+      width: 100%;
+      background: #6b21a8;
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .submit-btn:hover {
+      background: #581c87;
+    }
+
+    /* Green success message — shown by JS on valid submission */
+    .success-msg {
+      background: #dcfce7;
+      color: #166534;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      display: none;
+      margin-top: 1rem;
+    }
+
+    /* --- Footer --- */
+    footer {
+      background: #6b21a8;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      padding: 1.25rem;
+      font-size: 13px;
+    }
+
+    /* --- Responsive / Mobile Styles ---
+       Stacks layout on screens narrower than 640px */
+    @media (max-width: 640px) {
+      /* Show hamburger, hide nav links by default */
+      .hamburger {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: #6b21a8;
+        padding: 0.5rem;
+        border-top: 1px solid rgba(255,255,255,0.15);
+      }
+
+      /* JS adds this class to show the mobile menu */
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 10px 16px;
+      }
+
+      /* Stack contact grid vertically on mobile */
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 26px;
+      }
+
+      .hero {
+        padding: 3rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       NAVIGATION BAR
+       ============================================= -->
+  <nav>
+    <div class="nav-inner">
+      <!-- School name/logo -->
+      <div class="nav-logo">🏫 Eminence Global School</div>
+
+      <!-- Hamburger button (visible only on mobile) -->
+      <button class="hamburger" id="ham" aria-label="Toggle menu">&#9776;</button>
+
+      <!-- Navigation links — clicking calls showSection() JS function -->
+      <div class="nav-links" id="navLinks">
+        <a onclick="showSection('home')"    class="active" id="nav-home">Home</a>
+        <a onclick="showSection('about')"              id="nav-about">About</a>
+        <a onclick="showSection('courses')"            id="nav-courses">Courses</a>
+        <a onclick="showSection('contact')"            id="nav-contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =============================================
+       SECTION 1 — HOME
+       ============================================= -->
+  <section id="home" class="active">
+    <div class="hero">
+      <h1>Welcome to Eminence Global School</h1>
+      <p>Empowering young minds with knowledge, creativity, and character — for a brighter tomorrow.</p>
+
+      <div class="hero-btns">
+        <!-- Navigates to Courses section -->
+        <button class="btn-primary" onclick="showSection('courses')">Explore Courses</button>
+        <!-- Calls JS function to toggle welcome message -->
+        <button class="btn-outline" onclick="showWelcome()">Say Hello! 👋</button>
+      </div>
+
+      <!-- Hidden welcome message; toggled by showWelcome() -->
+      <div id="welcome-msg">🎉 Welcome to our school! We're thrilled to have you here.</div>
+
+      <!-- Stats banner -->
+      <div class="hero-banner">
+        <div class="hero-stat"><div class="num">1,200+</div><div class="lbl">Students enrolled</div></div>
+        <div class="hero-stat"><div class="num">85+</div><div class="lbl">Qualified teachers</div></div>
+        <div class="hero-stat"><div class="num">30+</div><div class="lbl">Years of excellence</div></div>
+        <div class="hero-stat"><div class="num">98%</div><div class="lbl">Pass rate</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 2 — ABOUT
+       ============================================= -->
+  <section id="about">
+    <div class="content">
+      <div class="section-title">About our school</div>
+      <div class="section-sub">
+        Founded in 1994, Eminence Global School has been nurturing students with a holistic education
+        in a safe, inclusive, and inspiring environment.
+      </div>
+
+      <!-- Four about cards in a responsive grid -->
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="icon">🏆</div>
+          <h3>Our mission</h3>
+          <p>To provide quality education that develops critical thinking, creativity, and responsible citizenship.</p>
+        </div>
+        <div class="about-card">
+          <div class="icon">👥</div>
+          <h3>Our community</h3>
+          <p>A diverse, welcoming community of students, teachers, and families working toward shared goals.</p>
+        </div>
+        <div class="about-card">
+          <div class="icon">💡</div>
+          <h3>Our approach</h3>
+          <p>We combine traditional academics with modern, activity-based learning to help every student thrive.</p>
+        </div>
+        <div class="about-card">
+          <div class="icon">📜</div>
+          <h3>Accreditation</h3>
+          <p>Fully accredited by the National Board of Education with consistently outstanding results.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 3 — COURSES
+       ============================================= -->
+  <section id="courses">
+    <div class="content">
+      <div class="section-title">Our courses</div>
+      <div class="section-sub">
+        We offer a wide range of programmes designed to challenge and inspire students at every level.
+      </div>
+
+      <!-- Course cards in a responsive grid -->
+      <div class="course-grid">
+
+        <!-- Course 1 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-blue">Science</span>
+            <h3>Physics &amp; Chemistry</h3>
+            <p>Explore the laws of nature through hands-on experiments in our modern labs.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 9–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in Physics & Chemistry!')">Enroll</button>
+          </div>
+        </div>
+
+        <!-- Course 2 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-green">Mathematics</span>
+            <h3>Advanced Mathematics</h3>
+            <p>From algebra and geometry to calculus — building strong problem-solving foundations.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 6–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in Advanced Mathematics!')">Enroll</button>
+          </div>
+        </div>
+
+        <!-- Course 3 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-amber">Arts</span>
+            <h3>Creative Arts</h3>
+            <p>Drawing, painting, sculpture, and digital media — expressing ideas through art.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 1–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in Creative Arts!')">Enroll</button>
+          </div>
+        </div>
+
+        <!-- Course 4 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-purple">Technology</span>
+            <h3>Computer Science</h3>
+            <p>Coding, algorithms, and digital literacy — preparing students for the tech-driven world.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 7–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in Computer Science!')">Enroll</button>
+          </div>
+        </div>
+
+        <!-- Course 5 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-coral">Languages</span>
+            <h3>English &amp; Literature</h3>
+            <p>Reading, writing, and critical analysis — developing confident, lifelong readers.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 1–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in English & Literature!')">Enroll</button>
+          </div>
+        </div>
+
+        <!-- Course 6 -->
+        <div class="course-card">
+          <div class="course-top">
+            <span class="course-badge badge-green">Social Studies</span>
+            <h3>History &amp; Geography</h3>
+            <p>Understanding the world — past and present — to become informed global citizens.</p>
+          </div>
+          <div class="course-bottom">
+            <span>⏱ Grades 4–12</span>
+            <button class="enroll-btn" onclick="alert('Enrolled in History & Geography!')">Enroll</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 4 — CONTACT
+       ============================================= -->
+  <section id="contact">
+    <div class="content">
+      <div class="section-title">Get in touch</div>
+      <div class="section-sub">We'd love to hear from you — questions, enquiries, or just a hello.</div>
+
+      <div class="contact-grid">
+
+        <!-- Left: contact info -->
+        <div class="contact-info">
+          <div class="info-row">
+            <div class="info-icon">📍</div>
+            <div><h4>Address</h4><p>42 Vidya Nagar, Sector 15, Chandigarh — 160015, Punjab, India</p></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">📞</div>
+            <div><h4>Phone</h4><p>+91 98765 43210 &nbsp;|&nbsp; +91 172 234 5678</p></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">✉️</div>
+            <div><h4>Email</h4><p>info@eminenceglobalschool.in</p></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🕐</div>
+            <div><h4>Office hours</h4><p>Mon–Fri, 8:00 AM – 4:30 PM</p></div>
+          </div>
+        </div>
+
+        <!-- Right: contact form -->
+        <div class="contact-form">
+
+          <!-- Name field -->
+          <div class="form-group">
+            <label for="fname">Full name</label>
+            <input type="text" id="fname" placeholder="e.g. Priya Sharma" />
+            <div class="err" id="err-name">⚠ Please enter your name.</div>
+          </div>
+
+          <!-- Indian Mobile Number field -->
+          <div class="form-group">
+            <label for="fphone">Mobile number</label>
+            <div style="display:flex; gap:8px;">
+              <span style="background:#f3e8ff; border:1px solid #cbd5e1; border-radius:6px; padding:9px 12px; font-size:14px; color:#6b21a8; font-weight:600; white-space:nowrap;">🇮🇳 +91</span>
+              <input type="tel" id="fphone" placeholder="e.g. 98765 43210" maxlength="10" style="flex:1;" />
+            </div>
+            <div class="err" id="err-phone">⚠ Please enter a valid 10-digit Indian mobile number.</div>
+          </div>
+
+          <!-- Email field -->
+          <div class="form-group">
+            <label for="femail">Email address</label>
+            <input type="email" id="femail" placeholder="e.g. priya@gmail.com" />
+            <div class="err" id="err-email">⚠ Please enter a valid email address.</div>
+          </div>
+
+          <!-- Indian State dropdown -->
+          <div class="form-group">
+            <label for="fstate">State</label>
+            <select id="fstate" style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; font-family:inherit; background:#fff; color:#1a1a2e; outline:none;">
+              <option value="">-- Select your state --</option>
+              <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
+              <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
+              <option>Goa</option><option>Gujarat</option><option>Haryana</option>
+              <option>Himachal Pradesh</option><option>Jharkhand</option>
+              <option>Karnataka</option><option>Kerala</option>
+              <option>Madhya Pradesh</option><option>Maharashtra</option>
+              <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
+              <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+              <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+              <option>Telangana</option><option>Tripura</option>
+              <option>Uttar Pradesh</option><option>Uttarakhand</option>
+              <option>West Bengal</option>
+              <option>Andaman &amp; Nicobar Islands</option>
+              <option>Chandigarh</option><option>Delhi</option>
+              <option>Jammu &amp; Kashmir</option><option>Ladakh</option>
+              <option>Lakshadweep</option><option>Puducherry</option>
+            </select>
+            <div class="err" id="err-state">⚠ Please select your state.</div>
+          </div>
+
+          <!-- Message field -->
+          <div class="form-group">
+            <label for="fmsg">Message</label>
+            <textarea id="fmsg" placeholder="Write your message here..."></textarea>
+            <div class="err" id="err-msg">⚠ Please enter your message.</div>
+          </div>
+
+          <!-- Submit button — calls submitForm() JS function -->
+          <button class="submit-btn" onclick="submitForm()">Send message</button>
+
+          <!-- Success message — shown by JS on valid submission -->
+          <div class="success-msg" id="success-msg">
+            ✅ Thank you! Your message has been sent. We'll get back to you soon.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+       ============================================= -->
+  <footer>
+    <p>© 2025 Eminence Global School. All rights reserved.</p>
+  </footer>
+
+  <!-- =============================================
+       INTERNAL JAVASCRIPT
+       All interactive behaviour lives here
+       ============================================= -->
+  <script>
+
+    /* --------------------------------------------------
+       showSection(id)
+       Hides all sections and shows only the one
+       matching the given id. Also updates the active
+       nav link and closes the mobile menu.
+    -------------------------------------------------- */
+    function showSection(id) {
+      // Hide every section
+      document.querySelectorAll('section').forEach(function(s) {
+        s.classList.remove('active');
+      });
+
+      // Show the requested section
+      document.getElementById(id).classList.add('active');
+
+      // Remove "active" class from all nav links
+      document.querySelectorAll('.nav-links a').forEach(function(a) {
+        a.classList.remove('active');
+      });
+
+      // Add "active" class to the matching nav link
+      document.getElementById('nav-' + id).classList.add('active');
+
+      // Close mobile menu (if open)
+      document.getElementById('navLinks').classList.remove('open');
+
+      // Scroll back to the top of the page
+      window.scrollTo(0, 0);
+    }
+
+    /* --------------------------------------------------
+       Hamburger toggle
+       On mobile, tapping the ☰ button opens/closes
+       the navigation links dropdown.
+    -------------------------------------------------- */
+    document.getElementById('ham').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    /* --------------------------------------------------
+       showWelcome()
+       Toggles the hidden welcome message in the hero.
+       This is the simple interactive JS feature.
+    -------------------------------------------------- */
+    function showWelcome() {
+      var el = document.getElementById('welcome-msg');
+      // If currently hidden → show it; if shown → hide it
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+      } else {
+        el.style.display = 'block';
+      }
+    }
+
+    /* --------------------------------------------------
+       validateEmail(email)
+       Returns true if the email matches a basic pattern.
+       Uses a regular expression (regex) to check format.
+    -------------------------------------------------- */
+    function validateEmail(email) {
+      // Pattern: something @ something . something
+      var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return pattern.test(email);
+    }
+
+    /* --------------------------------------------------
+       submitForm()
+       Reads the three form fields, validates them,
+       shows error messages for any invalid fields,
+       and shows a success message if everything is OK.
+    -------------------------------------------------- */
+    function submitForm() {
+      var name  = document.getElementById('fname').value.trim();
+      var phone = document.getElementById('fphone').value.trim();
+      var email = document.getElementById('femail').value.trim();
+      var state = document.getElementById('fstate').value;
+      var msg   = document.getElementById('fmsg').value.trim();
+      var valid = true;
+
+      // Hide all errors and success message
+      ['err-name','err-phone','err-email','err-state','err-msg'].forEach(function(id) {
+        document.getElementById(id).style.display = 'none';
+      });
+      document.getElementById('success-msg').style.display = 'none';
+
+      // Validate name
+      if (name === '') {
+        document.getElementById('err-name').style.display = 'block';
+        valid = false;
+      }
+
+      // Validate Indian mobile: exactly 10 digits, starts with 6-9
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        document.getElementById('err-phone').style.display = 'block';
+        valid = false;
+      }
+
+      // Validate email
+      if (email === '' || !validateEmail(email)) {
+        document.getElementById('err-email').style.display = 'block';
+        valid = false;
+      }
+
+      // Validate state selection
+      if (state === '') {
+        document.getElementById('err-state').style.display = 'block';
+        valid = false;
+      }
+
+      // Validate message
+      if (msg === '') {
+        document.getElementById('err-msg').style.display = 'block';
+        valid = false;
+      }
+
+      if (valid) {
+        document.getElementById('fname').value  = '';
+        document.getElementById('fphone').value = '';
+        document.getElementById('femail').value = '';
+        document.getElementById('fstate').value = '';
+        document.getElementById('fmsg').value   = '';
+        document.getElementById('success-msg').style.display = 'block';
+      }
+    }
+
+  </script>
+</body>
+</html>
